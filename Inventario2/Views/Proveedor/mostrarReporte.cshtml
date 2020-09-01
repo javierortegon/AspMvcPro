@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Inventario2.Models.ProdProve>
+
+@{
+    ViewBag.Title = "mostrarReporte";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var categories = ViewData["datos"]; // Cast the list
+    var query = Model;
+}
+
+<h2>mostrarReporte</h2>
+
+@{
+    foreach (var item in Model)
+    {
+    <h3>@Html.DisplayFor(modelItem => item.producto)</h3>
+    }
+}

@@ -7,6 +7,7 @@ using Inventario2.Models;
 
 namespace Inventario2.Controllers
 {
+    [Authorize]
     public class ProveedorController : Controller
     {
         // GET: Proveedor
@@ -79,6 +80,22 @@ namespace Inventario2.Controllers
                 return View();
                 throw;
             }
+        }
+
+        public ActionResult mostrarReporte()
+        {
+            var db = new inventarioEntities();
+            //proveedor objProveedor = db.proveedor.Where(a => a.id == 1).FirstOrDefault();
+            //var usuario = (from p in db.producto select new { p.nombre }).ToList();
+            //ViewData["datos"] = usuario;
+            var query = from proveedor in db.proveedor
+                        join producto in db.producto on proveedor.id equals producto.id_proveedor
+                        select new ProdProve{ proveedor = proveedor.nombre, producto = producto.nombre };
+            
+
+            return View(query);
+            
+            
         }
     }
 }

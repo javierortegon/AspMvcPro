@@ -7,6 +7,7 @@ using Inventario2.Models;
 
 namespace Inventario2.Controllers
 {
+    
     public class ProductoController : Controller
     {
         // GET: Producto
