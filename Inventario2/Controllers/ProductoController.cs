@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Inventario2.Models;
+using Rotativa;
 
 namespace Inventario2.Controllers
 {
@@ -61,6 +62,43 @@ namespace Inventario2.Controllers
             {
                 return db.proveedor.Find(idProveedor).nombre;
             }
+        }
+
+        public ActionResult Edit(int id)
+        {
+            using (var db = new inventarioEntities())
+            {
+                producto producto = db.producto.Where(a => a.id == id).FirstOrDefault();
+                return View(producto);
+            }
+        }
+
+        public ActionResult VistaCustom()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult VistaCustom(FormCollection formCollection)
+        {
+            string name = formCollection["user"];
+            string pass = formCollection["password"];
+            return View();
+        }
+
+        //metodo que crea la vista
+        public ActionResult Reporte()
+        {
+            using (var db = new inventarioEntities())
+            {
+                return View(db.producto.ToList());
+            }
+        }
+
+        public ActionResult ImprimirReporte()
+        {
+            return new ActionAsPdf("Reporte") { FileName = "Productos.pdf" };
         }
 
     }

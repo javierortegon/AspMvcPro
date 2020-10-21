@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
 using Inventario2.Models;
+using Rotativa;
+
 
 namespace Inventario2.Controllers
 {
@@ -103,6 +105,22 @@ namespace Inventario2.Controllers
                     return Login("Verifique sus datos");
                 }
             }
+        }
+
+        public ActionResult reporte()
+        {
+
+            using (var db = new inventarioEntities())
+            {
+                
+                return View(db.usuario.ToList());
+            }
+        }
+
+        public ActionResult print()
+        {
+            return new ActionAsPdf("reporte")
+            { FileName = "Test.pdf" };
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿@model List<Inventario2.Models.usuario>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>reporte</title>
+</head>
+<body>
+    @foreach(var element in Model)
+    {
+        <p>
+            @element.nombre
+        </p>
+    }
+</body>
+</html>

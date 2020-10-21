@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "VistaCustom";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2>VistaCustom</h2>
+
+
+    <div class="form-horizontal">
+        <form action="/Producto/VistaCustom" method="post">
+            <div class="form-group">
+                <label class="control-label col-md-2">Usuario </label>
+                <div class="col-md-10">
+                    <input type="text" name="user" value="" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Password </label>
+                <div class="col-md-10">
+                    <input type="password" name="password" value="" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Ingresar" class="btn btn-default" />
+                </div>
+            </div>
+        </form>
+    </div>
+}
