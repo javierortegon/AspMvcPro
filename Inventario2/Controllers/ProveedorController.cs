@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Inventario2.Models;
 
 namespace Inventario2.Controllers
 {
-    [Authorize]
+    
     public class ProveedorController : Controller
     {
         // GET: Proveedor
@@ -58,7 +59,6 @@ namespace Inventario2.Controllers
             return View();
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(proveedor proveedor)
@@ -96,6 +96,26 @@ namespace Inventario2.Controllers
             return View(query);
             
             
+        }
+
+        public ActionResult PaginadorIndex(int pagina = 1)
+        {
+            var cantidadRegistrosPagina = 5;
+            using (var db = new inventarioEntities())
+            {
+                var proveedores = db.proveedor.OrderBy(x => x.id).Skip((pagina - 1) * cantidadRegistrosPagina)
+                    .Take(cantidadRegistrosPagina).ToList();
+
+                var totalRegistros = db.usuario.Count();
+                var modelo = new ProveedorIndex();
+                modelo.Proveedores = proveedores;
+                modelo.ActualPage = pagina;
+                modelo.Total = totalRegistros;
+                modelo.RecordsPage = cantidadRegistrosPagina;
+                modelo.ValoresQueryString = new RouteValueDictionary();
+
+                return View(modelo);
+            }
         }
     }
 }

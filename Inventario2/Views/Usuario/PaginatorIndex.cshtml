@@ -1,0 +1,31 @@
+﻿@model Inventario2.Models.IndexModel
+
+@{
+    ViewBag.Title = "PaginatorIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h4>Resultados</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Edad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var persona in Model.Personas)
+        {
+            <tr>
+                <td>@persona.id</td>
+                <td>@persona.nombre</td>
+                <td>@persona.email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{Html.RenderPartial("Paginador", Model);}

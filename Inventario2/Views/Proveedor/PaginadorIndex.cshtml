@@ -1,0 +1,29 @@
+﻿@model Inventario2.Models.ProveedorIndex
+
+@{
+    ViewBag.Title = "PaginadorIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Resultados</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Telefono</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var proveedor in Model.Proveedores)
+        {
+        <tr>
+            <td>@proveedor.id</td>
+            <td>@proveedor.nombre</td>
+            <td>@proveedor.telefono</td>
+        </tr>
+        }
+    </tbody>
+</table>
+@{ Html.RenderPartial("Paginador", Model);}
