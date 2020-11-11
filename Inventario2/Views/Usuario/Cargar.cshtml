@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Cargar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cargar</h2>
+
+@using (Html.BeginForm("Cargar", "Usuario", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="postedFile" />
+    <input type="submit" value="Inportar"/>
+}
+
+<img src="@Url.Content("~/Uploads/93975.jpg")" alt="Alternate Text" />

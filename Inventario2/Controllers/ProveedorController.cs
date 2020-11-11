@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Inventario2.Models;
+using System.IO;
 
 namespace Inventario2.Controllers
 {
@@ -116,6 +117,75 @@ namespace Inventario2.Controllers
 
                 return View(modelo);
             }
+        }
+
+        public ActionResult FormImage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult FormImage(HttpPostedFileBase fileForm)
+        {
+            string filePath = string.Empty;
+            if(fileForm != null)
+            {
+                string path = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                filePath = path + Path.GetFileName(fileForm.FileName);
+                string extension = Path.GetExtension(fileForm.FileName);
+                fileForm.SaveAs(filePath);
+            }
+            return View();
+        }
+
+        public ActionResult UploadCSV()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UploadCSV(HttpPostedFileBase fileForm)
+        {
+            string filePath = string.Empty;
+            if (fileForm != null)
+            {
+                string path = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                filePath = path + Path.GetFileName(fileForm.FileName);
+                string extension = Path.GetExtension(fileForm.FileName);
+                fileForm.SaveAs(filePath);
+
+                string csvData = System.IO.File.ReadAllText(filePath);
+                foreach (string row in csvData.Split('\n'))
+                {
+                    if (!string.IsNullOrEmpty(row))
+                    {
+                        var newProveedor = new proveedor
+                        {
+                            nombre = row.Split(';')[0],
+                            nombre_contacto = row.Split(';')[1],
+                            direccion = row.Split(';')[2],
+                            telefono = row.Split(';')[3]
+                        };
+
+                        using (var db = new inventarioEntities())
+                        {
+                            db.proveedor.Add(newProveedor);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+            return View();
         }
     }
 }

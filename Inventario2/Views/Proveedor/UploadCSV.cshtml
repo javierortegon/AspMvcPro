@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "UploadCSV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>UploadCSV</h2>
+
+@using (Html.BeginForm("UploadCSV", "Proveedor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="fileForm" />
+    <input type="submit" value="Enviar" />
+}
