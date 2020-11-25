@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -56,6 +57,20 @@ namespace Inventario2.Controllers
             }
         }
 
+        public static string HashSHA1(string value)
+        {
+            var sha1 = System.Security.Cryptography.SHA1.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(value);
+            var hash = sha1.ComputeHash(inputBytes);
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
         public ActionResult Create()
         {
             return View();
@@ -71,6 +86,7 @@ namespace Inventario2.Controllers
             {
                 using (var db = new inventarioEntities())
                 {
+                    usuario.password = UsuarioController.HashSHA1(usuario.password);
                     db.usuario.Add(usuario);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -96,7 +112,8 @@ namespace Inventario2.Controllers
         {
             using (var db = new inventarioEntities())
             {
-                var userLogin = db.usuario.FirstOrDefault(e => e.email == user && e.password == password);
+                string passwordHash = UsuarioController.HashSHA1(password);
+                var userLogin = db.usuario.FirstOrDefault(e => e.email == user && e.password == passwordHash);
                 if (userLogin != null)
                 {
                     FormsAuthentication.SetAuthCookie(userLogin.email, true);
