@@ -44,6 +44,14 @@
           <Property Name="id_producto" Type="int" />
           <Property Name="cantidad" Type="int" />
         </EntityType>
+        <EntityType Name="producto_imagen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="imagen" Type="varchar" MaxLength="200" />
+          <Property Name="id_producto" Type="int" />
+        </EntityType>
         <EntityType Name="proveedor">
           <Key>
             <PropertyRef Name="id" />
@@ -54,6 +62,13 @@
           <Property Name="telefono" Type="varchar" MaxLength="20" />
           <Property Name="nombre_contacto" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="usuario">
           <Key>
             <PropertyRef Name="id" />
@@ -63,8 +78,14 @@
           <Property Name="apellido" Type="varchar" MaxLength="50" />
           <Property Name="fecha_nacimiento" Type="date" />
           <Property Name="email" Type="varchar" MaxLength="100" />
-          <Property Name="password" Type="varchar" MaxLength="8" />
+          <Property Name="password" Type="varchar" MaxLength="200" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'def.inventario.usuariorol' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="usuariorol">
+          <Property Name="idUsuario" Type="int" />
+          <Property Name="idRol" Type="int" />
+        </EntityType>-->
         <Association Name="compra_ibfk_1">
           <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
           <End Role="compra" Type="Self.compra" Multiplicity="*" />
@@ -125,12 +146,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="producto_imagen_ibfk_1">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="producto_imagen" Type="Self.producto_imagen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto_imagen">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errores durante la generación:
+error 6004: Una relación hace referencia a la tabla 'def.inventario.usuariorol', pero no se encuentra la tabla.
+        <Association Name="usuariorol_ibfk_1" />-->
+        <!--Errores durante la generación:
+error 6004: Una relación hace referencia a la tabla 'def.inventario.usuariorol', pero no se encuentra la tabla.
+        <Association Name="usuariorol_ibfk_2" />-->
         <EntityContainer Name="inventarioModelStoreContainer">
           <EntitySet Name="cliente" EntityType="Self.cliente" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="compra" EntityType="Self.compra" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="producto" EntityType="Self.producto" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="producto_compra" EntityType="Self.producto_compra" Schema="inventario" store:Type="Tables" />
+          <EntitySet Name="producto_imagen" EntityType="Self.producto_imagen" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="proveedor" EntityType="Self.proveedor" Schema="inventario" store:Type="Tables" />
+          <EntitySet Name="roles" EntityType="Self.roles" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="usuario" EntityType="Self.usuario" Schema="inventario" store:Type="Tables" />
           <AssociationSet Name="compra_ibfk_1" Association="Self.compra_ibfk_1">
             <End Role="usuario" EntitySet="usuario" />
@@ -151,6 +192,10 @@
           <AssociationSet Name="producto_ibfk_1" Association="Self.producto_ibfk_1">
             <End Role="proveedor" EntitySet="proveedor" />
             <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="producto_imagen_ibfk_1" Association="Self.producto_imagen_ibfk_1">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="producto_imagen" EntitySet="producto_imagen" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -193,6 +238,7 @@
           <Property Name="id_proveedor" Type="Int32" />
           <NavigationProperty Name="producto_compra" Relationship="Self.producto_compra_ibfk_2" FromRole="producto" ToRole="producto_compra" />
           <NavigationProperty Name="proveedor" Relationship="Self.producto_ibfk_1" FromRole="producto" ToRole="proveedor" />
+          <NavigationProperty Name="producto_imagen" Relationship="Self.producto_imagen_ibfk_1" FromRole="producto" ToRole="producto_imagen" />
         </EntityType>
         <EntityType Name="producto_compra">
           <Key>
@@ -205,6 +251,15 @@
           <NavigationProperty Name="compra" Relationship="Self.producto_compra_ibfk_1" FromRole="producto_compra" ToRole="compra" />
           <NavigationProperty Name="producto" Relationship="Self.producto_compra_ibfk_2" FromRole="producto_compra" ToRole="producto" />
         </EntityType>
+        <EntityType Name="producto_imagen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="imagen" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="id_producto" Type="Int32" />
+          <NavigationProperty Name="producto" Relationship="Self.producto_imagen_ibfk_1" FromRole="producto_imagen" ToRole="producto" />
+        </EntityType>
         <EntityType Name="proveedor">
           <Key>
             <PropertyRef Name="id" />
@@ -216,6 +271,13 @@
           <Property Name="nombre_contacto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="producto" Relationship="Self.producto_ibfk_1" FromRole="proveedor" ToRole="producto" />
         </EntityType>
+        <EntityType Name="roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="usuario">
           <Key>
             <PropertyRef Name="id" />
@@ -225,7 +287,7 @@
           <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="fecha_nacimiento" Type="DateTime" />
           <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="password" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="compra" Relationship="Self.compra_ibfk_1" FromRole="usuario" ToRole="compra" />
         </EntityType>
         <Association Name="compra_ibfk_2">
@@ -288,12 +350,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="producto_imagen_ibfk_1">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="producto_imagen" Type="Self.producto_imagen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto_imagen">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="inventarioEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="cliente" EntityType="Self.cliente" />
           <EntitySet Name="compra" EntityType="Self.compra" />
           <EntitySet Name="producto" EntityType="Self.producto" />
           <EntitySet Name="producto_compra" EntityType="Self.producto_compra" />
+          <EntitySet Name="producto_imagen" EntityType="Self.producto_imagen" />
           <EntitySet Name="proveedor" EntityType="Self.proveedor" />
+          <EntitySet Name="roles" EntityType="Self.roles" />
           <EntitySet Name="usuario" EntityType="Self.usuario" />
           <AssociationSet Name="compra_ibfk_2" Association="Self.compra_ibfk_2">
             <End Role="cliente" EntitySet="cliente" />
@@ -314,6 +390,10 @@
           <AssociationSet Name="producto_ibfk_1" Association="Self.producto_ibfk_1">
             <End Role="proveedor" EntitySet="proveedor" />
             <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="producto_imagen_ibfk_1" Association="Self.producto_imagen_ibfk_1">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="producto_imagen" EntitySet="producto_imagen" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -365,6 +445,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="producto_imagen">
+            <EntityTypeMapping TypeName="inventarioModel.producto_imagen">
+              <MappingFragment StoreEntitySet="producto_imagen">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="proveedor">
             <EntityTypeMapping TypeName="inventarioModel.proveedor">
               <MappingFragment StoreEntitySet="proveedor">
@@ -373,6 +462,14 @@
                 <ScalarProperty Name="direccion" ColumnName="direccion" />
                 <ScalarProperty Name="telefono" ColumnName="telefono" />
                 <ScalarProperty Name="nombre_contacto" ColumnName="nombre_contacto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="inventarioModel.roles">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

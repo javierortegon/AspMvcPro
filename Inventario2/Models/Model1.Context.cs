@@ -29,7 +29,9 @@ namespace Inventario2.Models
         public virtual DbSet<compra> compra { get; set; }
         public virtual DbSet<producto> producto { get; set; }
         public virtual DbSet<producto_compra> producto_compra { get; set; }
+        public virtual DbSet<producto_imagen> producto_imagen { get; set; }
         public virtual DbSet<proveedor> proveedor { get; set; }
+        public virtual DbSet<roles> roles { get; set; }
         public virtual DbSet<usuario> usuario { get; set; }
     }
 }

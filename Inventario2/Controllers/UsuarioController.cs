@@ -117,6 +117,7 @@ namespace Inventario2.Controllers
                 if (userLogin != null)
                 {
                     FormsAuthentication.SetAuthCookie(userLogin.email, true);
+                    Session["User"] = userLogin;
                     return RedirectToAction("Index", "Proveedor");
                 }
                 else

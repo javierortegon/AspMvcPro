@@ -18,6 +18,7 @@ namespace Inventario2.Models
         public producto()
         {
             this.producto_compra = new HashSet<producto_compra>();
+            this.producto_imagen = new HashSet<producto_imagen>();
         }
     
         public int id { get; set; }
@@ -30,5 +31,7 @@ namespace Inventario2.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<producto_compra> producto_compra { get; set; }
         public virtual proveedor proveedor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<producto_imagen> producto_imagen { get; set; }
     }
 }

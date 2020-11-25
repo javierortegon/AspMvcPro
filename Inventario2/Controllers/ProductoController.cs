@@ -5,12 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using Inventario2.Models;
 using Rotativa;
+using Inventario2.Filtros;
 
 namespace Inventario2.Controllers
 {
     
     public class ProductoController : Controller
     {
+        [AuthorizeUser(idRol:3)]
         // GET: Producto
         public ActionResult Index()
         {
